@@ -9,7 +9,9 @@ export const metadata: Metadata = {
   description: "La pagina che stai cercando non esiste.",
 };
 
-export default function NotFound() {
+export default function NotFound({
+  message = "Ops! La pagina che stai cercando non esiste.",
+}) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center">
       <AlertCircle size={48} className="text-accent mb-6" />
@@ -17,9 +19,7 @@ export default function NotFound() {
         <LottieUser animationData={animation} />
       </div>
 
-      <p className="text-lg mb-6">
-        Ops! La pagina che stai cercando non esiste.
-      </p>
+      <p className="text-lg mb-6">{message}</p>
       <Link
         href="/"
         className="inline-block bg-accent hover:bg-accent-hover text-white px-6 py-3 rounded-lg transition-colors"
