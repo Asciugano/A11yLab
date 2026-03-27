@@ -1,18 +1,18 @@
-version: "3.9"
-
 services:
   db:
-    image: postgres:15
-    container_name: a11ylab-postgres
+    image: mysql:8.0
+    container_name: a11ylab-db
     restart: always
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-      POSTGRES_USER: a11yuser
-      POSTGRES_PASSWORD: a11ypass
-      POSTGRES_DB: a11ylab
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: a11ylab
+      MYSQL_USER: a11yuser
+      MYSQL_PASSWORD: a11ypass
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/mysql
 
 volumes:
   db-data:
