@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+
+  role        UserRole    @default(USER)
+  subcription Subcription @default(FREE)
+
+  certificates Certificate[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Lesson {
+  id          String @id @default(uuid())
+  title       String
+  description String
+
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId String
+
+  type   LessonType
+  resUrl String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Course {
+  id          String @id @default(uuid())
+  title       String
+  description String
+
+  subscription Subcription
+
+  lessons Lesson[]
+
+  certificate  CertificateTemplate?
+  certificates Certificate[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model CertificateTemplate {
+  id String @id @default(uuid())
+
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId String @unique
+
+  resUrl String?
+
+  createdAt    DateTime      @default(now())
+  certificates Certificate[]
+}
+
+model Certificate {
+  id String @id @default(uuid())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId String
+
+  template              CertificateTemplate? @relation(fields: [certificateTemplateId], references: [id])
+  certificateTemplateId String?
+
+  resUrl String?
+
+  createdAt DateTime @default(now())
+}
+
+enum LessonType {
+  DOCUMENT
+  VIDEO
+}
+
+enum UserRole {
+  USER
+  CREATOR
+  ADMIN
+}
+
+enum Subcription {
+  FREE
+  PLUS
+}
