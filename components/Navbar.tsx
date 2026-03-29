@@ -1,16 +1,9 @@
-import {
-  User,
-  BookOpen,
-  LogIn,
-  LogOut,
-  Video,
-  MonitorPlay,
-} from "lucide-react";
+import { User, BookOpen, LogIn, LogOut, MonitorPlay } from "lucide-react";
 import Link from "next/link";
+import { getUserIfFromToken as getUserIdFromToken } from "@/lib/jwt";
 
 export default async function NavBar() {
-  const logged = false;
-  const handleLogout = () => {};
+  const logged = (await getUserIdFromToken()) !== null;
 
   return (
     <nav className="mx-4 my-4 rounded-xl bg-neutral-200 dark:bg-neutral-900 shadow-lg">
@@ -62,13 +55,12 @@ export default async function NavBar() {
               <span>Login</span>
             </Link>
           ) : (
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-1 px-4 py-2 text-white rounded-lg bg-red-600 hover:bg-red-500 transition"
-            >
-              <LogOut size={18} />
-              <span>Logout</span>
-            </button>
+            <form action="/api/auth/logout" method="POST">
+              <button className="flex items-center gap-1 px-4 py-2 text-white rounded-lg bg-red-600 hover:bg-red-500 transition">
+                <LogOut size={18} />
+                <span>Logout</span>
+              </button>
+            </form>
           )}
         </div>
       </div>
