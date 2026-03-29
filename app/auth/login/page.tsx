@@ -20,7 +20,7 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      await axios.post("/api/login", formData);
+      await axios.post("/api/auth/login", formData);
     } catch (e) {
       console.error(e);
 

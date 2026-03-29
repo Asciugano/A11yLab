@@ -21,7 +21,7 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      await axios.post("/api/register", formData);
+      await axios.post("/api/auth/register", formData);
     } catch (e) {
       console.error(e);
 
