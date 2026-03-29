@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(user);
   } catch (e) {
-    console.error("error in signup controller", e);
+    console.error("error in login controller", e);
     return NextResponse.json(
       { message: "Ops... Qualcosa e' adato storto" },
       { status: 500 },

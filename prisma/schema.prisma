@@ -17,8 +17,8 @@ model User {
   email    String @unique
   password String
 
-  role        UserRole    @default(USER)
-  subcription Subcription @default(FREE)
+  role         UserRole    @default(USER)
+  subscription Subcription @default(FREE)
 
   certificates Certificate[]
 
