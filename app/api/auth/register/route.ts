@@ -5,9 +5,9 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { email, password, role, subscription } = await req.json();
+    const { email, password, fullName, role, subscription } = await req.json();
 
-    if (!email || !password)
+    if (!email || !password || !fullName)
       return NextResponse.json(
         { message: "Devi inserire tutti i campi richiesti" },
         { status: 400 },
@@ -25,6 +25,7 @@ export async function POST(req: Request) {
       data: {
         email,
         password: hashedPassword,
+        fullName,
         ...(role && { role }),
         ...(subscription && { subscription }),
       },
