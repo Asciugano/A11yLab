@@ -8,6 +8,13 @@ export default function LottieUser({
   autoplay = true,
 }) {
   return (
-    <Lottie animationData={animationData} loop={loop} autoplay={autoplay} />
+    <div className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[300px] aspect-square">
+      <Lottie
+        animationData={animationData}
+        loop={loop}
+        autoplay={autoplay}
+        className="w-full h-full object-contain"
+      />
+    </div>
   );
 }

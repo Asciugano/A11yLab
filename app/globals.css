@@ -3,6 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --card-color: #d4d4d4;
 }
 
 @theme inline {
@@ -16,6 +18,8 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    --card-color: #262626;
   }
 }
 
@@ -24,6 +28,8 @@
   --color-hover-primary: #3b82f6;
   --color-accent: #f59e0b;
   --color-hover-accent: #fbbf24;
+
+  --color-card: var(--card-color);
 }
 
 body {

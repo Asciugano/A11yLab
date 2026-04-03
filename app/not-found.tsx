@@ -11,18 +11,19 @@ export const metadata: Metadata = {
 
 export default function NotFound({
   message = "Ops! La pagina che stai cercando non esiste.",
+  lottieAnimation = animation,
 }) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center">
-      <AlertCircle size={48} className="text-accent mb-6" />
+      <AlertCircle size={48} className="text-primary mb-6" />
       <div className="w-80 h-80 mb-6">
-        <LottieUser animationData={animation} />
+        <LottieUser animationData={lottieAnimation} />
       </div>
 
       <p className="text-lg mb-6">{message}</p>
       <Link
         href="/"
-        className="inline-block bg-accent hover:bg-accent-hover text-white px-6 py-3 rounded-lg transition-colors"
+        className="inline-block bg-primary hover:bg-accent-hover text-white px-6 py-3 rounded-lg transition-colors"
       >
         Torna alla Home
       </Link>
