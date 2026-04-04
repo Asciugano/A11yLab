@@ -6,6 +6,16 @@ export async function generateToken(userID: string) {
     expiresIn: "1d",
   });
 
+  (await cookies()).set({
+    name: "jwt",
+    value: token,
+    maxAge: 24 * 60 * 60,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NEXT_ENV !== "dev",
+    path: "/",
+  });
+
   return token;
 }
 
@@ -15,13 +25,11 @@ export async function getUserIdFromToken() {
   if (!token) return null;
 
   try {
-    // verifica e estrazionde (dell'userID) dal jwt
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
       userID: string;
     };
     return decoded.userID;
   } catch (e) {
-    // in caso di errore rimozione del token
     console.error(e);
     return null;
   }

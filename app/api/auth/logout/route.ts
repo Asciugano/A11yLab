@@ -20,7 +20,6 @@ export async function POST() {
       );
 
     (await cookies()).delete("jwt");
-    console.log((await cookies()).get("jwt"));
 
     return NextResponse.json({ message: "Effettuato il logout con successo" });
   } catch (e) {

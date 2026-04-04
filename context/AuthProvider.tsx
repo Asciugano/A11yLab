@@ -10,37 +10,46 @@ import {
   useState,
 } from "react";
 
-const AuthContext = createContext<AuthContextType | null>(null);
-
 type AuthContextType = {
   user: User | null;
   isLogged: boolean;
+  loading: boolean;
   login: (user: User) => void;
   logout: () => void;
 };
 
-export default function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+const AuthContext = createContext<AuthContextType | null>(null);
+
+interface Props {
+  children: ReactNode;
+  initialUser?: User | null;
+}
+
+export default function AuthProvider({ children, initialUser = null }: Props) {
+  const [user, setUser] = useState<User | null>(initialUser);
+  const [loading, setLoading] = useState(true);
 
   const login = (user: User) => setUser(user);
-  const logout = async () => setUser(null);
+  const logout = () => setUser(null);
 
   useEffect(() => {
-    axios
-      .get("/api/auth/me")
-      .then((res) => res.data)
-      .then(setUser)
-      .catch((e) => {
-        setUser(null);
-        console.error("error in AuthProvider", e);
-      });
-  }, []);
+    if (!initialUser) {
+      axios
+        .get("/api/auth/me", { withCredentials: true })
+        .then((res) => setUser(res.data))
+        .catch((e) => setUser(null))
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+  }, [initialUser]);
 
   return (
     <AuthContext.Provider
       value={{
         user,
         isLogged: !!user,
+        loading,
         login,
         logout,
       }}
