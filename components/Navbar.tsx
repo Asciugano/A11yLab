@@ -1,9 +1,19 @@
+"use client";
+
 import { User, BookOpen, LogIn, LogOut, MonitorPlay } from "lucide-react";
 import Link from "next/link";
-import { getUserIfFromToken as getUserIdFromToken } from "@/lib/jwt";
+import { useAuth } from "@/context/AuthProvider";
+import axios from "axios";
 
-export default async function NavBar() {
-  const logged = (await getUserIdFromToken()) !== null;
+export default function NavBar() {
+  const { isLogged, logout } = useAuth();
+
+  const handleLogout = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    axios.post("/api/auth/logout").catch((e) => console.error(e));
+    logout();
+  };
 
   return (
     <nav className="mx-4 my-4 rounded-xl bg-neutral-200 dark:bg-neutral-900 shadow-lg">
@@ -46,7 +56,7 @@ export default async function NavBar() {
           </Link>
 
           {/* Login o Logout */}
-          {!logged ? (
+          {!isLogged ? (
             <Link
               href="/auth/login"
               className="flex items-center gap-1 px-4 py-2 text-white rounded-lg bg-accent hover:bg-hover-accent transition"
@@ -55,8 +65,11 @@ export default async function NavBar() {
               <span>Login</span>
             </Link>
           ) : (
-            <form action="/api/auth/logout" method="POST">
-              <button className="flex items-center gap-1 px-4 py-2 text-white rounded-lg bg-red-600 hover:bg-red-500 transition">
+            <form onSubmit={handleLogout}>
+              <button
+                type="submit"
+                className="flex items-center gap-1 px-4 py-2 text-white rounded-lg bg-red-600 hover:bg-red-500 transition"
+              >
                 <LogOut size={18} />
                 <span>Logout</span>
               </button>

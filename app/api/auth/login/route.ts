@@ -1,6 +1,7 @@
 import { generateToken } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -20,7 +21,7 @@ export async function POST(req: Request) {
         { status: 401 },
       );
 
-    const valid = bcrypt.compare(password, user.password);
+    const valid = await bcrypt.compare(password, user.password);
     if (!valid)
       return NextResponse.json(
         { message: "Cerdenziali invalide" },
@@ -28,6 +29,16 @@ export async function POST(req: Request) {
       );
 
     const token = await generateToken(user.id);
+    (await cookies()).set({
+      name: "jwt",
+      value: token,
+      maxAge: 24 * 60 * 60,
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NEXT_ENV !== "dev",
+      path: "/",
+    });
+    console.log((await cookies()).get("jwt"));
 
     return NextResponse.json(user);
   } catch (e) {

@@ -1,6 +1,7 @@
 import { generateToken } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -32,6 +33,16 @@ export async function POST(req: Request) {
     });
 
     const token = await generateToken(newUser.id);
+    (await cookies()).set({
+      name: "jwt",
+      value: token,
+      maxAge: 24 * 60 * 60,
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NEXT_ENV !== "dev",
+      path: "/",
+    });
+
     return NextResponse.json({ newUser }, { status: 201 });
   } catch (e) {
     console.error("error in register controller", e);

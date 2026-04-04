@@ -1,18 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { getUserIdFromToken } from "./lib/jwt";
 
-export function proxy(req: NextRequest) {
+export async function proxy(req: NextRequest) {
+  const userID = await getUserIdFromToken();
   const token = req.cookies.get("jwt")?.value;
 
   // INFO: utenti gia' loggati non tornano sulla pagina di login
-  if (token && req.nextUrl.pathname.startsWith("/auth/login"))
+  if (userID && req.nextUrl.pathname.startsWith("/auth/login"))
     return NextResponse.redirect(new URL("/", req.url));
 
   // INFO: utenti non loggati vanno sulla pagina di login
-  if (!token) return NextResponse.redirect(new URL("/auth/login", req.url));
+  if (!userID && !token)
+    return NextResponse.redirect(new URL("/auth/login", req.url));
 
   try {
-    jwt.verify(token, process.env.JWT_SECRET!);
+    jwt.verify(token!, process.env.JWT_SECRET!);
     return NextResponse.next();
   } catch (e) {
     console.error("error in the middleware ", e);

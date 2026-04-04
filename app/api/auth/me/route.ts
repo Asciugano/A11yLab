@@ -1,30 +1,29 @@
 import { getUserIdFromToken } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function POST() {
+export async function GET() {
   try {
     const userID = await getUserIdFromToken();
+    console.log(userID);
     if (!userID)
       return NextResponse.json(
-        { message: "Prima di poter fare logout devi essere loggato" },
+        {
+          message:
+            "Impossibile trovare l'id dell'utente perfavore fare di nuovo il login",
+        },
         { status: 401 },
       );
 
     const user = await prisma.user.findUnique({ where: { id: userID } });
     if (!user)
       return NextResponse.json(
-        { message: "Utente sconosciuto" },
-        { status: 401 },
+        { message: "Utente inesistente" },
+        { status: 404 },
       );
-
-    (await cookies()).delete("jwt");
-    console.log((await cookies()).get("jwt"));
-
-    return NextResponse.json({ message: "Effettuato il logout con successo" });
+    return NextResponse.json({ user });
   } catch (e) {
-    console.error("error in logout controller", e);
+    console.error("error in me controller", e);
     return NextResponse.json(
       { message: "Ops... Qualcosa e' adato storto" },
       { status: 500 },

@@ -1,3 +1,7 @@
+"use client";
+import { useAuth } from "@/context/AuthProvider";
+
 export default function Home() {
-  return <div>Home</div>;
+  const { user } = useAuth();
+  return <div>Home + {!user ? "Anonimo" : user.fullName}</div>;
 }

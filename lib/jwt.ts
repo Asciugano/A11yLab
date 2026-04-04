@@ -6,22 +6,11 @@ export async function generateToken(userID: string) {
     expiresIn: "1d",
   });
 
-  (await cookies()).set({
-    name: "jwt",
-    value: token,
-    maxAge: 24 * 60 * 60,
-    httpOnly: true,
-    sameSite: "strict",
-    secure: process.env.NEXT_ENV !== "dev",
-    path: "/",
-  });
-
   return token;
 }
 
-export async function getUserIfFromToken() {
-  const cookiesStore = cookies();
-  const token = (await cookiesStore).get("jwt")?.value;
+export async function getUserIdFromToken() {
+  const token = (await cookies()).get("jwt")?.value;
 
   if (!token) return null;
 
@@ -34,8 +23,6 @@ export async function getUserIfFromToken() {
   } catch (e) {
     // in caso di errore rimozione del token
     console.error(e);
-    const cookiesStore = cookies();
-    (await cookiesStore).delete("jwt");
     return null;
   }
 }

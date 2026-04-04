@@ -1,11 +1,16 @@
 "use client";
 
+import { useAuth } from "@/context/AuthProvider";
 import axios, { AxiosError } from "axios";
 import { Mail, Eye, EyeOff, Loader2, Lock } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 export default function LoginPage() {
+  const { login } = useAuth();
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -19,8 +24,12 @@ export default function LoginPage() {
     e.preventDefault();
 
     setLoading(true);
+    setError(null);
+
     try {
-      await axios.post("/api/auth/login", formData);
+      const res = await axios.post("/api/auth/login", formData);
+      login(res.data);
+      router.push("/");
     } catch (e) {
       console.error(e);
 

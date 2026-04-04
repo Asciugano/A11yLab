@@ -1,11 +1,16 @@
 "use client";
 
+import { useAuth } from "@/context/AuthProvider";
 import axios, { AxiosError } from "axios";
 import { User, Mail, Eye, EyeOff, Loader2, Lock } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function RegisterPage() {
+  const { login } = useAuth();
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -20,8 +25,12 @@ export default function RegisterPage() {
     e.preventDefault();
 
     setLoading(true);
+    setError(null);
+
     try {
-      await axios.post("/api/auth/register", formData);
+      const res = await axios.post("/api/auth/register", formData);
+      login(res.data);
+      router.push("/");
     } catch (e) {
       console.error(e);
 
