@@ -23,7 +23,7 @@ export default function NotFound({
       <p className="text-lg mb-6">{message}</p>
       <Link
         href="/"
-        className="inline-block bg-primary hover:bg-accent-hover text-white px-6 py-3 rounded-lg transition-colors"
+        className="inline-block bg-primary hover:bg-hover-primary text-white px-6 py-3 rounded-lg transition-colors"
       >
         Torna alla Home
       </Link>
