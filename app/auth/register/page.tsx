@@ -4,11 +4,12 @@ import { useAuth } from "@/context/AuthProvider";
 import axios, { AxiosError } from "axios";
 import { User, Mail, Eye, EyeOff, Loader2, Lock } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function RegisterPage() {
   const { login } = useAuth();
+  const redirectTo = useSearchParams().get("redirect") || "/";
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ export default function RegisterPage() {
     try {
       const res = await axios.post("/api/auth/register", formData);
       login(res.data);
-      router.push("/");
+      router.push(redirectTo);
     } catch (e) {
       console.error(e);
 

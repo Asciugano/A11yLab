@@ -11,8 +11,11 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url));
 
   // INFO: utenti non loggati vanno sulla pagina di login
-  if (!userID && !token)
-    return NextResponse.redirect(new URL("/auth/login", req.url));
+  if (!userID && !token) {
+    const loginURL = new URL("/auth/login", req.url);
+    loginURL.searchParams.set("redirect", req.nextUrl.pathname);
+    return NextResponse.redirect(loginURL);
+  }
 
   try {
     jwt.verify(token!, process.env.JWT_SECRET!);
@@ -24,5 +27,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/profile/:path*", "/lessons/:path*"],
+  matcher: ["/profile/:path*", "/lessons/:path*", "/courses/create/:path*"],
 };
