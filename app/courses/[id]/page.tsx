@@ -23,7 +23,7 @@ export default async function CoursePage({
     );
 
   return (
-    <div className="p-6">
+    <div className="flex flex-col">
       <div className="flex items-end justify-end mb-6">
         <CreateLink link="#" text="Crea una lezione" />
       </div>

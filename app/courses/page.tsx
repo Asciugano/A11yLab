@@ -17,8 +17,8 @@ export default async function Courses() {
   });
 
   return (
-    <div className="p-6">
-      <div className="flex items-end justify-end mb-6">
+    <div className="flex flex-col">
+      <div className="flex items-end justify-end mb-4 px-6">
         <CreateLink link="#" text="Crea un corso" />
       </div>
       {courses.length <= 0 ? (
