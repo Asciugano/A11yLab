@@ -117,8 +117,13 @@ export default function CreateCoursePage() {
                 if (file) setFormData({ ...formData, certificateFile: file });
               }}
               className="w-full bg-transparent outline-none text-neutral-500 placeholder-neutral-500"
+              required
             />
           </div>
+
+          {error && error.length > 0 && (
+            <p className="text-sm text-red-500 text-center">{error}</p>
+          )}
 
           <button
             type="submit"

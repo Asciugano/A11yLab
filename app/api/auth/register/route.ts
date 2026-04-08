@@ -31,6 +31,12 @@ export async function POST(req: Request) {
       },
     });
 
+    if (!newUser)
+      return NextResponse.json(
+        { message: "impossibile creare il nuovo utente" },
+        { status: 400 },
+      );
+
     const token = await generateToken(newUser.id);
 
     return NextResponse.json({ newUser }, { status: 201 });
