@@ -45,4 +45,9 @@ A11yLab è una piattaforma educativa per insegnare l'importanza dell'accessibili
 ```bash
 git clone https://github.com/tuo-username/a11ylab.git
 cd a11ylab
+npm i
+docker compose up --build -d
+npx prisma migrate reset
+npx prisma generate
+npm run dev
 ```
