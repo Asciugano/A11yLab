@@ -16,7 +16,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-3 mt-2">
             <Link
-              href="https://github.com"
+              href="https://github.com/Asciugano/A11yLab"
               target="_blank"
               className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition"
             >
