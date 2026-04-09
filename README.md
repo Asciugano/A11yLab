@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# A11yLab
 
-## Getting Started
+A11yLab è una piattaforma educativa per insegnare l'importanza dell'accessibilità web e come creare siti accessibili a tutti, senza barriere.
 
-First, run the development server:
+---
+
+## 📌 Obiettivi
+
+- Educare sviluppatori e designer sull'accessibilità web (A11y).
+- Offrire corsi e video-lezioni su pratiche accessibili.
+- Fornire certificati di completamento dei corsi.
+- Mostrare buone pratiche di UI/UX accessibile.
+
+---
+
+## 🛠 Tecnologie
+
+- **Frontend:** Next.js 14 + TypeScript + Tailwind CSS
+- **Backend:** Next.js App Router con API routes
+- **Database:** PostgreSQL con Prisma ORM
+- **Autenticazione:** JWT + sessioni gestite tramite context React
+- **Stato globale:** React Context API (`AuthProvider`)
+- **Icone:** Lucide React + React-Icons (FontAwesome per brand)
+- **Animazioni:** Lottie per animazioni interattive
+- **Altri tools:** Axios per chiamate API
+
+---
+
+## 🏗 Funzionalità principali
+
+- Registrazione e login utenti con ruoli (USER, CREATOR, ADMIN)
+- Gestione corsi e lezioni (documenti e video)
+- Visualizzazione certificati e template
+- Dashboard per creare e modificare corsi
+- Footer con link utili e social
+- Navbar fissa con trasparenza e blur quando sopra i contenuti
+- Responsive e ottimizzato per dispositivi mobili
+
+---
+
+## ⚡ Setup del progetto
+
+1. Clona il repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/tuo-username/a11ylab.git
+cd a11ylab
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
