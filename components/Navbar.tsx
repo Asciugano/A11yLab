@@ -16,7 +16,7 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="mx-4 my-4 rounded-xl bg-neutral-200 dark:bg-neutral-900 shadow-lg">
+    <nav className="fixed top-0 left-0 right-0 z-50 mx-4 my-4 rounded-xl bg-neutral-200/40 dark:bg-neutral-900/40 backdrop-blur-md shadow-lg">
       <div className="flex items-center justify-between px-6 py-3">
         {/* SINISTRA: Logo */}
         <div>
