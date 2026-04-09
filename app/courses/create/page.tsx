@@ -2,7 +2,7 @@
 
 import EnumDropdown from "@/components/Dropdown";
 import { useAuth } from "@/context/AuthProvider";
-import { Subcription, UserRole } from "@/lib/generated/prisma/enums";
+import { Subscription, UserRole } from "@/lib/generated/prisma/enums";
 import axios, { AxiosError } from "axios";
 import { Award, BookOpen, CreditCard, FileText, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ export default function CreateCoursePage() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    subscription: Subcription.FREE.toString(),
+    subscription: Subscription.FREE.toString(),
     certificateFile: null as File | null,
   });
 
@@ -94,7 +94,7 @@ export default function CreateCoursePage() {
             onChange={(role) =>
               setFormData({ ...formData, subscription: role })
             }
-            options={Object.values(Subcription)}
+            options={Object.values(Subscription)}
             icon={
               <CreditCard
                 size={20}

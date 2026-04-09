@@ -1,4 +1,4 @@
-import { Course, Subcription } from "@/lib/generated/prisma/client";
+import { Course, Subscription } from "@/lib/generated/prisma/client";
 import { ArrowRight, Crown, Tag } from "lucide-react";
 import Link from "next/link";
 
@@ -10,7 +10,7 @@ interface CourseCardProps {
 
 export default function CourseCard({ course }: CourseCardProps) {
   const subscriptionIcon =
-    course.subscription === Subcription.PLUS ? (
+    course.subscription === Subscription.PLUS ? (
       <Crown size={20} className="text-yellow-500" />
     ) : (
       <Tag size={20} className="text-green-500" />

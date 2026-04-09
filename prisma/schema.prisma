@@ -18,8 +18,8 @@ model User {
   email    String @unique
   password String
 
-  role         UserRole    @default(USER)
-  subscription Subcription @default(FREE)
+  role         UserRole     @default(USER)
+  subscription Subscription @default(FREE)
 
   certificates Certificate[]
 
@@ -47,7 +47,7 @@ model Course {
   title       String
   description String
 
-  subscription Subcription
+  subscription Subscription
 
   lessons Lesson[]
 
@@ -98,7 +98,7 @@ enum UserRole {
   ADMIN
 }
 
-enum Subcription {
+enum Subscription {
   FREE
   PLUS
 }
