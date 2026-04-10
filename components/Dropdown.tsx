@@ -53,7 +53,7 @@ export default function EnumDropdown<T extends string>({
                 : "text-neutral-500 dark:text-neutral-500"
             }`}
           >
-            {value ?? placeholder}
+            {value || value !== "" ? value : placeholder}
           </span>
         </div>
         {!open ? (

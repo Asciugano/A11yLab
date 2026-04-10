@@ -1,5 +1,5 @@
-import { Course, Subscription } from "@/lib/generated/prisma/client";
-import { ArrowRight, Crown, Tag } from "lucide-react";
+import { Course } from "@/lib/generated/prisma/client";
+import { BookOpen, Lock } from "lucide-react";
 import Link from "next/link";
 
 interface CourseCardProps {
@@ -9,32 +9,53 @@ interface CourseCardProps {
 }
 
 export default function CourseCard({ course }: CourseCardProps) {
-  const subscriptionIcon =
-    course.subscription === Subscription.PLUS ? (
-      <Crown size={20} className="text-yellow-500" />
-    ) : (
-      <Tag size={20} className="text-green-500" />
-    );
-
   return (
-    <div className="rounded-xl p-6 shadow-md dark:shadow-card/50 hover:shadow-lg transition-shadow flex items-center justify-between bg-card mx-2 my-2">
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-2 mb-2">
-          {subscriptionIcon}
-          <h2 className="text-xl font-semibold">{course.title}</h2>
-        </div>
-        <p className="text-gray-600 mb-4">{course.description}</p>
-        <p className="text-sm text-gray-500">
-          {course.lessons.length} lezion
-          {course.lessons.length !== 1 ? "i" : "e"}
-        </p>
-      </div>
+    <div className="m-2">
+      <Link href={`/courses/${course.id}`}>
+        <div className="group bg-card rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5 cursor-pointer border border-transparent hover:border-primary/30">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2 text-primary font-semibold">
+              <BookOpen size={18} />
+              <span>Corso</span>
+            </div>
 
-      <Link
-        href={`/courses/${course.id}`}
-        className="bg-primary hover:bg-hover-primary text-white px-4 py-2 rounded-lg text-center flex items-center justify-center gap-2"
-      >
-        Vai al corso <ArrowRight className="text-white" />
+            {/* Subscription badge */}
+            <span
+              className={`text-xs px-3 py-1 rounded-full font-medium ${
+                course.subscription === "FREE"
+                  ? "bg-green-100 text-green-600"
+                  : "bg-yellow-100 text-yellow-700"
+              }`}
+            >
+              {course.subscription === "FREE" ? "Gratis" : "Plus"}
+            </span>
+          </div>
+
+          {/* Titolo */}
+          <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2 group-hover:text-primary transition">
+            {course.title}
+          </h3>
+
+          {/* Descrizione */}
+          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-4">
+            {course.description}
+          </p>
+
+          {/* Footer */}
+          <div className="flex items-center justify-between mt-4">
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              {course.lessons.length} lezioni
+            </span>
+
+            <div className="flex items-center gap-1 text-primary font-semibold group-hover:translate-x-1 transition">
+              <span>Apri</span>
+              {course.subscription === "PLUS" && (
+                <Lock size={16} className="text-yellow-500" />
+              )}
+            </div>
+          </div>
+        </div>
       </Link>
     </div>
   );

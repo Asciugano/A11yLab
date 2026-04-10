@@ -1,5 +1,5 @@
 import { Lesson, LessonType } from "@/lib/generated/prisma/client";
-import { File, Play } from "lucide-react";
+import { Play, File } from "lucide-react";
 
 interface LessonCardProps {
   lesson: Lesson;

@@ -44,7 +44,7 @@ export default async function CoursePage({
               </div>
             </div>
 
-            <CreateLink link="#" text="Nuova lezione" />
+            <CreateLink link="/lesson/create" text="Nuova lezione" />
           </div>
         </div>
       </div>
