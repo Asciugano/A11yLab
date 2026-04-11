@@ -2,24 +2,16 @@
 
 import EnumDropdown from "@/components/Dropdown";
 import { useAuth } from "@/context/AuthProvider";
-import { Course } from "@/lib/generated/prisma/client";
 import { LessonType, UserRole } from "@/lib/generated/prisma/enums";
 import axios, { AxiosError } from "axios";
-import {
-  NotebookPen,
-  BookOpen,
-  CreditCard,
-  FileText,
-  Loader2,
-} from "lucide-react";
+import { NotebookPen, BookOpen, Layers, FileText, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 
-interface Props {
-  course: Course;
-}
-
-export default function CreateLessonPage({ course }: Props) {
+export default function CreateLessonPage() {
+  const params = useParams();
+  const id = params.id as string;
   const router = useRouter();
   const { user } = useAuth();
 
@@ -28,6 +20,7 @@ export default function CreateLessonPage({ course }: Props) {
     description: "",
     type: "",
     resUrl: "",
+    course: id,
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +30,13 @@ export default function CreateLessonPage({ course }: Props) {
     e.preventDefault();
     setLoading(true);
     try {
-      // TODO: implementare
+      if (!user || user.role === UserRole.USER) {
+        setError("Un utente non deve trovarsi qui");
+        return;
+      }
+
+      const res = await axios.post("/api/lesson", formData);
+      router.push(`/courses/${id}`);
     } catch (e) {
       console.error(e);
 
@@ -95,20 +94,20 @@ export default function CreateLessonPage({ course }: Props) {
             />
           </div>
 
-          {/* role */}
+          {/* Lesson Type */}
           <EnumDropdown
             value={formData.type}
             onChange={(role) => setFormData({ ...formData, type: role })}
             options={Object.values(LessonType)}
             icon={
-              <CreditCard
+              <Layers
                 size={20}
                 className="text-neutral-500 dark:text-neutral-400"
               />
             }
           />
 
-          {/* certificate */}
+          {/* Lesson */}
           <div className="flex items-center gap-3 border-neutral-400 dark:border-neutral-600 rounded-lg px-3 py-2 bg-white dark:bg-neutral-900 focus-within:ring-primary">
             <NotebookPen
               size={20}
@@ -123,7 +122,6 @@ export default function CreateLessonPage({ course }: Props) {
                   setFormData({ ...formData, resUrl: file.webkitRelativePath });
               }}
               className="w-full bg-transparent outline-none text-neutral-500 placeholder-neutral-500"
-              required
             />
           </div>
 
