@@ -7,9 +7,15 @@ export async function GET() {
     const userID = await getUserIdFromToken();
     if (!userID) return NextResponse.json(null, { status: 401 });
 
-    const user = await prisma.user.findUnique({ where: { id: userID } });
+    const user = await prisma.user.findUnique({
+      where: { id: userID },
+      include: {
+        enrollments: { include: { course: { include: { lessons: true } } } },
+        lessonProgres: true,
+      },
+    });
     if (!user) return NextResponse.json(null, { status: 404 });
-    return NextResponse.json({ user });
+    return NextResponse.json(user);
   } catch (e) {
     console.error("error in me controller", e);
     return NextResponse.json(

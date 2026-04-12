@@ -23,8 +23,11 @@ model User {
 
   certificates Certificate[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  enrollments Enrollments[]
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now())
+  lessonProgres LessonProgres[]
 }
 
 model Lesson {
@@ -38,8 +41,9 @@ model Lesson {
   type   LessonType
   resUrl String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now())
+  lessonProgres LessonProgres[]
 }
 
 model Course {
@@ -50,6 +54,8 @@ model Course {
   subscription Subscription
 
   lessons Lesson[]
+
+  enrollments Enrollments[]
 
   certificate  CertificateTemplate?
   certificates Certificate[]
@@ -85,6 +91,35 @@ model Certificate {
   resUrl String?
 
   createdAt DateTime @default(now())
+}
+
+model Enrollments {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  progres   Float   @default(0)
+  completed Boolean @default(false)
+
+  @@unique([userId, courseId])
+}
+
+model LessonProgres {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id])
+
+  completed Boolean @default(false)
+
+  @@unique([userId, lessonId])
 }
 
 enum LessonType {

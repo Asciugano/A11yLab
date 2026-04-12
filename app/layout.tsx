@@ -3,8 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/Navbar";
 import AuthProvider from "@/context/AuthProvider";
-import { getUserIdFromToken } from "@/lib/jwt";
-import { prisma } from "@/lib/prisma";
 import Footer from "@/components/Footer";
 
 const geistSans = Geist({
@@ -26,17 +24,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const userID = await getUserIdFromToken();
-  const user = userID
-    ? await prisma.user.findUnique({ where: { id: userID } })
-    : null;
   return (
     <html
       lang="it"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col pt-25">
-        <AuthProvider initialUser={user}>
+        <AuthProvider>
           <NavBar />
           <main className="flex-1">{children}</main>
         </AuthProvider>

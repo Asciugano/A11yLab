@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@/lib/generated/prisma/client";
+import { FullUser } from "@/types/user";
 import axios from "axios";
 import {
   createContext,
@@ -11,10 +11,10 @@ import {
 } from "react";
 
 type AuthContextType = {
-  user: User | null;
+  user: FullUser | null;
   isLogged: boolean;
   loading: boolean;
-  login: (user: User) => void;
+  login: (user: FullUser) => void;
   logout: () => void;
 };
 
@@ -22,27 +22,24 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 interface Props {
   children: ReactNode;
-  initialUser?: User | null;
 }
 
-export default function AuthProvider({ children, initialUser = null }: Props) {
-  const [user, setUser] = useState<User | null>(initialUser);
+export default function AuthProvider({ children }: Props) {
+  const [user, setUser] = useState<FullUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const login = (user: User) => setUser(user);
+  const login = (user: FullUser) => {
+    setUser(user);
+  };
   const logout = () => setUser(null);
 
   useEffect(() => {
-    if (!initialUser) {
-      axios
-        .get("/api/auth/me", { withCredentials: true })
-        .then((res) => setUser(res.data))
-        .catch((e) => setUser(null))
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
-  }, [initialUser]);
+    axios
+      .get("/api/auth/me", { withCredentials: true })
+      .then((res) => setUser(res.data))
+      .catch((e) => setUser(null))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <AuthContext.Provider

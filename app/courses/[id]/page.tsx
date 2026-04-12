@@ -3,6 +3,7 @@ import animation from "../../../public/lotties/404.json";
 import { prisma } from "@/lib/prisma";
 import CreateLink from "@/components/CreateLink";
 import LessonCard from "@/components/LessonCard";
+import EnrollButton from "@/components/EnrollButton";
 
 export default async function CoursePage({
   params,
@@ -85,9 +86,7 @@ export default async function CoursePage({
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             Segui tutte le lezioni per ottenere il certificato finale.
           </p>
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">
-            Continua il corso
-          </button>
+          <EnrollButton courseId={course.id} />
         </div>
       </div>
     </div>
