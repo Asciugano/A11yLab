@@ -20,7 +20,7 @@ export default function CreateLessonPage() {
     description: "",
     type: "",
     resUrl: "",
-    course: id,
+    courseId: id,
   });
 
   const [error, setError] = useState<string | null>(null);
