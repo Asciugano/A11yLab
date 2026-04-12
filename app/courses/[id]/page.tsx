@@ -59,11 +59,11 @@ export default async function CoursePage({
         </h2>
 
         {course.lessons.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2 bg-card/50 rounded-xl">
             {course.lessons.map((lesson) => (
               <div
                 key={lesson.id}
-                className="bg-card/50 rounded-2xl shadow hover:shadow-lg transition p-4"
+                className="rounded-2xl shadow hover:shadow-lg transition p-4"
               >
                 <LessonCard lesson={lesson} />
               </div>
