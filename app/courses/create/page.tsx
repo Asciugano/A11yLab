@@ -7,6 +7,7 @@ import axios, { AxiosError } from "axios";
 import { Award, BookOpen, CreditCard, FileText, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function CreateCoursePage() {
   const router = useRouter();
@@ -32,6 +33,7 @@ export default function CreateCoursePage() {
       }
       const res = await axios.post("/api/courses", formData);
 
+      toast.success(`creato il corso: ${res.data.newCourse.title}`);
       router.push("/courses");
     } catch (e) {
       console.error(e);
@@ -41,6 +43,7 @@ export default function CreateCoursePage() {
       else if (typeof err.response?.data === "string")
         setError(err.response.data);
       else setError("Ops... Qualcosa e' andato storto");
+      toast.error(error);
     } finally {
       setLoading(false);
     }

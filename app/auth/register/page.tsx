@@ -6,6 +6,7 @@ import { User, Mail, Eye, EyeOff, Loader2, Lock } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function RegisterPage() {
   const { login } = useAuth();
@@ -31,6 +32,8 @@ export default function RegisterPage() {
     try {
       const res = await axios.post("/api/auth/register", formData);
       login(res.data);
+
+      toast.success(`Benvenuto ${res.data.newUser.fullName}`);
       router.push(redirectTo);
     } catch (e) {
       console.error(e);
@@ -41,6 +44,8 @@ export default function RegisterPage() {
       else if (typeof err.response?.data === "string")
         setError(err.response.data);
       else setError("Ops... Qualcosa e' andato storto");
+
+      toast.error(error);
     } finally {
       setLoading(false);
     }

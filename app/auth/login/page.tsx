@@ -6,6 +6,7 @@ import { Mail, Eye, EyeOff, Loader2, Lock } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -30,6 +31,8 @@ export default function LoginPage() {
     try {
       const res = await axios.post("/api/auth/login", formData);
       login(res.data);
+
+      toast.success(`Bentornato ${res.data.fullName}`);
       router.push(redirectTo);
     } catch (e) {
       console.error(e);
@@ -39,6 +42,8 @@ export default function LoginPage() {
       else if (typeof err.response?.data === "string")
         setError(err.response.data);
       else setError("Ops... Qualcosa e' andato storto");
+
+      toast.error(error);
     } finally {
       setLoading(false);
     }

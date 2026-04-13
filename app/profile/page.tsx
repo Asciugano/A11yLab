@@ -160,7 +160,7 @@ export default function Profile() {
             Riprendi da dove avevi lasciato e completa i tuoi corsi.
           </p>
           <Link
-            href="/courses"
+            href="/my-courses"
             className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition"
           >
             Vai ai corsi

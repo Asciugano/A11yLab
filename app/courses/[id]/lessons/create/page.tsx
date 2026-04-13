@@ -8,6 +8,7 @@ import { NotebookPen, BookOpen, Layers, FileText, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function CreateLessonPage() {
   const params = useParams();
@@ -36,6 +37,8 @@ export default function CreateLessonPage() {
       }
 
       const res = await axios.post("/api/lesson", formData);
+
+      toast.success(`creata la lezione: ${res.data.newLesson.title}`);
       router.push(`/courses/${id}`);
     } catch (e) {
       console.error(e);
@@ -45,6 +48,7 @@ export default function CreateLessonPage() {
       else if (typeof err.response?.data === "string")
         setError(err.response.data);
       else setError("Ops... Qualcosa e' andato storto");
+      toast.error(error);
     } finally {
       setLoading(false);
     }

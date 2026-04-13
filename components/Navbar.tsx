@@ -3,16 +3,32 @@
 import { User, BookOpen, LogIn, LogOut, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthProvider";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function NavBar() {
   const { isLogged, logout } = useAuth();
+  const [error, setError] = useState<string | null>(null);
 
-  const handleLogout = (e: React.SyntheticEvent) => {
+  const handleLogout = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    axios.post("/api/auth/logout").catch((e) => console.error(e));
-    logout();
+    try {
+      await axios.post("/api/auth/logout").catch((e) => console.error(e));
+      logout();
+      toast.success("A presto");
+    } catch (e) {
+      console.error(e);
+
+      const err = e as AxiosError<{ message?: string }>;
+      if (err.response?.data.message) setError(err.response.data.message);
+      else if (typeof err.response?.data === "string")
+        setError(err.response.data);
+      else setError("Ops... Qualcosa e' andato storto");
+
+      toast.error(error);
+    }
   };
 
   return (

@@ -4,6 +4,7 @@ import axios, { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function EnrollButton({ courseId }: { courseId: string }) {
   const [loading, setLoading] = useState(false);
@@ -18,6 +19,7 @@ export default function EnrollButton({ courseId }: { courseId: string }) {
     try {
       await axios.post(`/api/courses/${courseId}/enroll`);
 
+      toast.success("Iscrizione completata!");
       router.refresh();
     } catch (e) {
       console.error(e);
@@ -28,6 +30,8 @@ export default function EnrollButton({ courseId }: { courseId: string }) {
       else if (typeof err.response?.data === "string")
         setError(err.response.data);
       else setError("Ops... Qualcosa e' andato storto");
+
+      toast.error(error);
     } finally {
       setLoading(false);
     }

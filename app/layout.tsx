@@ -4,6 +4,7 @@ import "./globals.css";
 import NavBar from "@/components/Navbar";
 import AuthProvider from "@/context/AuthProvider";
 import Footer from "@/components/Footer";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,20 @@ export default async function RootLayout({
           <NavBar />
           <main className="flex-1">{children}</main>
         </AuthProvider>
+        <Toaster
+          position="top-center"
+          theme="system"
+          toastOptions={{
+            classNames: {
+              toast:
+                "bg-card text-foreground border border-border shadow-xl rounded-xl",
+
+              success: "bg-blue-600 text-white border border-blue-500",
+              error: "bg-red-600 text-white border border-red-500",
+              warning: "bg-yellow-500 text-black border border-yellow-400",
+            },
+          }}
+        />
         <Footer />
       </body>
     </html>

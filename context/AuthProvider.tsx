@@ -2,6 +2,7 @@
 
 import { FullUser } from "@/types/user";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import {
   createContext,
   ReactNode,
@@ -27,9 +28,11 @@ interface Props {
 export default function AuthProvider({ children }: Props) {
   const [user, setUser] = useState<FullUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   const login = (user: FullUser) => {
     setUser(user);
+    router.refresh();
   };
   const logout = () => setUser(null);
 
