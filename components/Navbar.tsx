@@ -1,6 +1,6 @@
 "use client";
 
-import { User, BookOpen, LogIn, LogOut, MonitorPlay } from "lucide-react";
+import { User, BookOpen, LogIn, LogOut, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthProvider";
 import axios from "axios";
@@ -48,11 +48,11 @@ export default function NavBar() {
           </Link>
 
           <Link
-            href="/video-courses"
+            href="/my-courses"
             className="flex items-center gap-1 hover:text-hover-primary transition"
           >
-            <MonitorPlay size={18} />
-            <span>Video-lezioni</span>
+            <GraduationCap size={18} />
+            <span>My Courses</span>
           </Link>
 
           {/* Login o Logout */}

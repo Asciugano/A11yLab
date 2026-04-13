@@ -21,6 +21,9 @@ export default async function Courses() {
       <div className="flex items-end justify-end mb-2 px-6">
         <CreateLink link="/courses/create" text="Crea un corso" />
       </div>
+      <h1 className="text-3xl font-black text-primary ml-2 mb-3">
+        Tutti i Corsi
+      </h1>
       {courses.length <= 0 ? (
         <NotFound lottieAnimation={animation} message="Nulla Qui" />
       ) : (
