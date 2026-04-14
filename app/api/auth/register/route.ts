@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       );
 
     const validEmail = (email: string) =>
-      /^[^\s@]+@[^\s@]+\.[^\@]+$/.test(email);
+      /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email);
     if (!validEmail(email))
       return NextResponse.json(
         { message: "L'email deve essere una email valida" },

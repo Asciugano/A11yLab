@@ -20,9 +20,9 @@ export default function CreateLessonPage() {
     title: "",
     description: "",
     type: "",
-    resUrl: "",
     courseId: id,
   });
+  const [file, setFile] = useState<File | null>(null);
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -33,10 +33,24 @@ export default function CreateLessonPage() {
     try {
       if (!user || user.role === UserRole.USER) {
         setError("Un utente non deve trovarsi qui");
+        setLoading(false);
         return;
       }
+      if (!file) {
+        setError("File mancante");
+        setLoading(false);
+        return;
+      }
+      const data = new FormData();
+      data.append("title", formData.title);
+      data.append("description", formData.description);
+      data.append("type", formData.type);
+      data.append("courseId", formData.courseId);
+      data.append("file", file);
 
-      const res = await axios.post("/api/lesson", formData);
+      const res = await axios.post("/api/lesson", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       toast.success(`creata la lezione: ${res.data.newLesson.title}`);
       router.push(`/courses/${id}`);
@@ -123,13 +137,13 @@ export default function CreateLessonPage() {
             />
             <input
               type="file"
-              accept="application/pdf,video/*"
+              accept={`${formData.type === LessonType.DOCUMENT ? "application/pdf" : "video/*"}`}
               onChange={(e) => {
                 const file = e.target.files?.[0];
-                if (file)
-                  setFormData({ ...formData, resUrl: file.webkitRelativePath });
+                if (file) setFile(file);
               }}
               className="w-full bg-transparent outline-none text-neutral-500 placeholder-neutral-500"
+              required
             />
           </div>
 
