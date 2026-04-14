@@ -39,11 +39,15 @@ export default function CreateCoursePage() {
       console.error(e);
 
       const err = e as AxiosError<{ message?: string }>;
-      if (err.response?.data.message) setError(err.response.data.message);
+      let message = "Ops... Qualcosa e' andato storto";
+
+      if (err.response?.data.message) message = err.response.data.message;
       else if (typeof err.response?.data === "string")
-        setError(err.response.data);
-      else setError("Ops... Qualcosa e' andato storto");
-      toast.error(error);
+        message = err.response.data;
+
+      setError(message);
+
+      toast.error(message);
     } finally {
       setLoading(false);
     }

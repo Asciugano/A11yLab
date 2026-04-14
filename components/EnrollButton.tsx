@@ -25,13 +25,15 @@ export default function EnrollButton({ courseId }: { courseId: string }) {
       console.error(e);
 
       const err = e as AxiosError<{ message?: string }>;
+      let message = "Ops... Qualcosa e' andato storto";
 
-      if (err.response?.data.message) setError(err.response.data.message);
+      if (err.response?.data.message) message = err.response.data.message;
       else if (typeof err.response?.data === "string")
-        setError(err.response.data);
-      else setError("Ops... Qualcosa e' andato storto");
+        message = err.response.data;
 
-      toast.error(error);
+      setError(message);
+
+      toast.error(message);
     } finally {
       setLoading(false);
     }

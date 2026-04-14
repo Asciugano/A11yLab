@@ -5,7 +5,15 @@ export async function POST(req: Request) {
   try {
     const { title, description, courseId, type, resUrl } = await req.json();
 
-    if (!title || !description || !courseId || !type)
+    // INFO: Se non esistono i parametri necessari o sono vuoti
+    if (
+      !title ||
+      !description ||
+      !courseId ||
+      !type ||
+      !(title.trim().length > 0) ||
+      !(description.trim().length > 0)
+    )
       return NextResponse.json(
         {
           message:

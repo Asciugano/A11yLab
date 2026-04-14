@@ -38,12 +38,15 @@ export default function LoginPage() {
       console.error(e);
 
       const err = e as AxiosError<{ message?: string }>;
-      if (err.response?.data.message) setError(err.response.data.message);
-      else if (typeof err.response?.data === "string")
-        setError(err.response.data);
-      else setError("Ops... Qualcosa e' andato storto");
+      let message = "Ops... Qualcosa e' andato storto";
 
-      toast.error(error);
+      if (err.response?.data.message) message = err.response.data.message;
+      else if (typeof err.response?.data === "string")
+        message = err.response.data;
+
+      setError(message);
+
+      toast.error(message);
     } finally {
       setLoading(false);
     }

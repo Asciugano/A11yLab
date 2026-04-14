@@ -7,9 +7,24 @@ export async function POST(req: Request) {
   try {
     const { email, password, fullName, role, subscription } = await req.json();
 
-    if (!email || !password || !fullName)
+    if (
+      !email ||
+      !password ||
+      !fullName ||
+      !email.trim() ||
+      !password.trim() ||
+      !fullName.trim()
+    )
       return NextResponse.json(
         { message: "Devi inserire tutti i campi richiesti" },
+        { status: 400 },
+      );
+
+    const validEmail = (email: string) =>
+      /^[^\s@]+@[^\s@]+\.[^\@]+$/.test(email);
+    if (!validEmail(email))
+      return NextResponse.json(
+        { message: "L'email deve essere una email valida" },
         { status: 400 },
       );
 
@@ -18,6 +33,16 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { message: "Impossibile creare un account con questa email" },
         { status: 401 },
+      );
+    const validPassword = (password: string) =>
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_].+$)/.test(password);
+    if (!validPassword(password) || password.length < 6)
+      return NextResponse.json(
+        {
+          message:
+            "La password deve contenere almeno 6 caratteri, una Lettera maiuscola, un numero e un carattere specale",
+        },
+        { status: 400 },
       );
 
     const hashedPassword = await bcrypt.hash(password, 10);

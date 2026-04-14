@@ -41,11 +41,11 @@ export default async function RootLayout({
           toastOptions={{
             classNames: {
               toast:
-                "bg-card text-foreground border border-border shadow-xl rounded-xl",
+                "!bg-card !text-foreground !border !border-border !shadow-xl !rounded-xl",
 
-              success: "bg-blue-600 text-white border border-blue-500",
-              error: "bg-red-600 text-white border border-red-500",
-              warning: "bg-yellow-500 text-black border border-yellow-400",
+              success: "!border !border-blue-500",
+              error: "!border !border-red-500",
+              warning: "!border !border-yellow-400",
             },
           }}
         />

@@ -6,7 +6,13 @@ export async function POST(req: Request) {
     const { title, description, subscription, certificateFile } =
       await req.json();
 
-    if (!title || !description || !certificateFile)
+    if (
+      !title ||
+      !description ||
+      !certificateFile ||
+      !(title.trim().length > 0) ||
+      !(description.trim().length > 0)
+    )
       return NextResponse.json(
         {
           message:
