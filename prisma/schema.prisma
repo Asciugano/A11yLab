@@ -39,7 +39,7 @@ model Lesson {
   courseId String
 
   type   LessonType
-  resUrl String?
+  resUrl String
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @default(now())
