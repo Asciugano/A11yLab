@@ -38,6 +38,16 @@ export async function POST(req: Request) {
         { status: 400 },
       );
 
+    const course = await prisma.course.findUnique({
+      where: { id: courseId },
+      include: { lessons: { orderBy: { order: "desc" } } },
+    });
+    if (!course)
+      return NextResponse.json(
+        { message: "Impossibile trovare il corso" },
+        { status: 404 },
+      );
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
@@ -55,6 +65,7 @@ export async function POST(req: Request) {
         courseId,
         type,
         resUrl,
+        order: !course.lessons[0] ? 0 : course.lessons[0].order + 1,
       },
     });
     if (!newLesson)

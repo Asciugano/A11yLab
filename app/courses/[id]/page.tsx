@@ -14,7 +14,11 @@ export default async function CoursePage({
 
   const course = await prisma.course.findUnique({
     where: { id },
-    include: { lessons: true },
+    include: {
+      lessons: {
+        orderBy: { order: "asc" },
+      },
+    },
   });
 
   if (!course)

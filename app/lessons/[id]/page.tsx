@@ -4,6 +4,10 @@ import { prisma } from "@/lib/prisma";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import animation from "../../../public/lotties/404.json";
+import { getUserIdFromToken } from "@/lib/jwt";
+import { redirect } from "next/navigation";
+import CompleteButton from "@/components/CompleteButton";
+import { toast } from "sonner";
 
 export default async function LessonPage({
   params,
@@ -11,9 +15,26 @@ export default async function LessonPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const userId = await getUserIdFromToken();
+  if (!userId)
+    return (
+      <NotFound
+        lottieAnimation={animation}
+        message="Impossibile trovare l'utente"
+      />
+    );
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user)
+    return (
+      <NotFound
+        lottieAnimation={animation}
+        message="Impossibile trovare l'utente"
+      />
+    );
+
   const lesson = await prisma.lesson.findUnique({
     where: { id },
-    include: { course: true },
+    include: { course: { include: { lessons: true } } },
   });
   if (!lesson)
     return (
@@ -22,6 +43,26 @@ export default async function LessonPage({
         message="impossibile trovare la lezione"
       />
     );
+
+  const previousLesson = lesson.course.lessons.slice(0, lesson.order);
+  const progress = await prisma.lessonProgres.findMany({
+    where: {
+      userId,
+      lessonId: {
+        in: previousLesson.map((l) => l.id),
+      },
+    },
+  });
+
+  const completedIds = progress
+    .filter((p) => p.completed)
+    .map((p) => p.lessonId);
+
+  const canAccess = previousLesson.every((l) => completedIds.includes(l.id));
+
+  if (!canAccess) {
+    return redirect(`/courses/${lesson.courseId}`);
+  }
 
   const ext = lesson.resUrl.split(".").pop()?.toLowerCase();
 
@@ -73,6 +114,19 @@ export default async function LessonPage({
               Nessun contenuto disponibile
             </p>
           )}
+        </div>
+
+        <div className="w-full mx-auto px-6 mt-20">
+          <div className="bg-card/50 rounded-2xl shadow p-8 text-center">
+            <h3 className="text-xl font-bold mb-2">Completa il corso 🎓</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Segui tutte le lezioni per ottenere il certificato finale.
+            </p>
+            <CompleteButton
+              lesson={lesson}
+              nextLesson={lesson.course.lessons[lesson.order + 1]}
+            />
+          </div>
         </div>
 
         {/* BACK */}

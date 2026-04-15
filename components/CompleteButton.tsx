@@ -1,26 +1,32 @@
 "use client";
 
+import { Lesson } from "@/lib/generated/prisma/client";
 import axios, { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function EnrollButton({ courseId }: { courseId: string }) {
+export default function CompleteButton({
+  lesson,
+  nextLesson,
+}: {
+  lesson: Lesson;
+  nextLesson?: Lesson;
+}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleEnroll = async (e: React.SyntheticEvent) => {
+  const handleComplete = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     setLoading(true);
-    setError(null);
     try {
-      await axios.post(`/api/courses/${courseId}/enroll`);
+      await axios.post(`/api/lesson/${lesson.id}/complete`);
+      toast.success(`Hai finito la lezione ${lesson.title}`);
 
-      toast.success("Iscrizione completata!");
-      router.refresh();
+      router.push(!nextLesson ? "/courses" : `/lessons/${nextLesson.id}`);
     } catch (e) {
       console.error(e);
 
@@ -42,11 +48,17 @@ export default function EnrollButton({ courseId }: { courseId: string }) {
   return (
     <div className="flex flex-col items-center justify-center">
       <button
-        onClick={handleEnroll}
+        onClick={handleComplete}
         disabled={loading}
-        className="bg-primary text-white px-6 py-3 rounded-xl hover:bg-hover-primary transition"
+        className="bg-accent text-white px-6 py-3 rounded-xl hover:bg-hover-accent transition"
       >
-        {loading ? <Loader2 className="animate-spin" size={20} /> : "Iscriviti"}
+        {loading ? (
+          <Loader2 className="animate-spin" size={20} />
+        ) : !nextLesson ? (
+          "Completa la lezione"
+        ) : (
+          "Vai alla successiva"
+        )}
       </button>
       {error && error?.length > 0 && (
         <p className="mt-2 text-sm text-red-500">{error}</p>
