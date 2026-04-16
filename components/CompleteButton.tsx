@@ -26,7 +26,11 @@ export default function CompleteButton({
       await axios.post(`/api/lesson/${lesson.id}/complete`);
       toast.success(`Hai finito la lezione ${lesson.title}`);
 
-      router.push(!nextLesson ? "/courses" : `/lessons/${nextLesson.id}`);
+      router.push(
+        !nextLesson
+          ? `/courses/${lesson.courseId}`
+          : `/lessons/${nextLesson.id}`,
+      );
     } catch (e) {
       console.error(e);
 

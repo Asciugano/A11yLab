@@ -4,6 +4,9 @@ import { prisma } from "@/lib/prisma";
 import CreateLink from "@/components/CreateLink";
 import LessonCard from "@/components/LessonCard";
 import EnrollButton from "@/components/EnrollButton";
+import { getUserIdFromToken } from "@/lib/jwt";
+import Link from "next/link";
+import CreateCertButton from "@/components/CreateCertButton";
 
 export default async function CoursePage({
   params,
@@ -11,12 +14,23 @@ export default async function CoursePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const userId = await getUserIdFromToken();
+  if (!userId)
+    return (
+      <NotFound
+        lottieAnimation={animation}
+        message="Impossibile trovare il corso"
+      />
+    );
 
   const course = await prisma.course.findUnique({
     where: { id },
     include: {
       lessons: {
         orderBy: { order: "asc" },
+      },
+      enrollments: {
+        where: { userId },
       },
     },
   });
@@ -28,6 +42,11 @@ export default async function CoursePage({
         lottieAnimation={animation}
       />
     );
+
+  console.log(course.enrollments);
+  const completed = !course.enrollments[0]
+    ? false
+    : (course.enrollments[0].completed ?? false);
 
   return (
     <div className="min-h-screen m-2">
@@ -90,7 +109,13 @@ export default async function CoursePage({
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             Segui tutte le lezioni per ottenere il certificato finale.
           </p>
-          <EnrollButton courseId={course.id} />
+          {!course.enrollments[0] ? (
+            <EnrollButton courseId={course.id} />
+          ) : !completed ? (
+            <Link href="#">Vai alla lezione </Link>
+          ) : (
+            <CreateCertButton course={course} />
+          )}
         </div>
       </div>
     </div>

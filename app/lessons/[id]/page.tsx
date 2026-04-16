@@ -1,7 +1,7 @@
 import NotFound from "@/app/not-found";
 import { LessonType } from "@/lib/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
-import { ArrowLeft, CheckCircle, ShieldCheck, Verified } from "lucide-react";
+import { ArrowLeft, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import animation from "../../../public/lotties/404.json";
 import { getUserIdFromToken } from "@/lib/jwt";
@@ -43,7 +43,7 @@ export default async function LessonPage({
       />
     );
 
-  const previousLesson = lesson.course.lessons.slice(0, lesson.order + 1);
+  const previousLesson = lesson.course.lessons.slice(0, lesson.order);
   const progress = await prisma.lessonProgres.findMany({
     where: {
       userId,
@@ -65,6 +65,12 @@ export default async function LessonPage({
 
   const ext = lesson.resUrl.split(".").pop()?.toLowerCase();
 
+  const currentProgress = await prisma.lessonProgres.findUnique({
+    where: { userId_lessonId: { userId, lessonId: id } },
+  });
+  const isCompleted = currentProgress?.completed ?? false;
+  const nextLesson = lesson.course.lessons[lesson.order + 1];
+
   return (
     <div className="min-h-screen m-2">
       {/* HERO */}
@@ -72,7 +78,7 @@ export default async function LessonPage({
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center gap-2">
             <h1 className="text-4xl font-bold mb-2">{lesson.title}</h1>
-            {completedIds.includes(lesson.id) && <CheckCircle size={20} />}
+            {isCompleted && <CheckCircle size={20} />}
           </div>
           <p className="text-lg opacity-90 max-w-2xl">{lesson.description}</p>
 
@@ -124,10 +130,20 @@ export default async function LessonPage({
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               Segui tutte le lezioni per ottenere il certificato finale.
             </p>
-            <CompleteButton
-              lesson={lesson}
-              nextLesson={lesson.course.lessons[lesson.order + 1]}
-            />
+            {!isCompleted ? (
+              <CompleteButton lesson={lesson} nextLesson={nextLesson} />
+            ) : (
+              <Link
+                className="bg-primary text-white px-6 py-3 rounded-xl hover:bg-hover-primary transition"
+                href={
+                  nextLesson
+                    ? `/lessons/${nextLesson.id}`
+                    : `/courses/${lesson.courseId}`
+                }
+              >
+                {nextLesson ? "Prossima Lezione" : "Torna al Corso"}
+              </Link>
+            )}
           </div>
         </div>
 

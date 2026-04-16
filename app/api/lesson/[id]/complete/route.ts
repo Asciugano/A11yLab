@@ -97,6 +97,26 @@ export async function POST(
       },
     });
 
+    const totalLesson = await prisma.lesson.count({
+      where: { courseId: lesson.courseId },
+    });
+    const completedLesson = await prisma.lessonProgres.count({
+      where: { userId, lesson: { courseId: lesson.courseId }, completed: true },
+    });
+
+    if (completedLesson === totalLesson)
+      await prisma.enrollments.update({
+        where: {
+          userId_courseId: {
+            userId,
+            courseId: lesson.courseId,
+          },
+        },
+        data: {
+          completed: true,
+        },
+      });
+
     return NextResponse.json(
       { message: "Lezione completata" },
       { status: 201 },
