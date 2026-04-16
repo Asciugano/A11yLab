@@ -1,13 +1,12 @@
 import NotFound from "@/app/not-found";
 import { LessonType } from "@/lib/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CheckCircle, ShieldCheck, Verified } from "lucide-react";
 import Link from "next/link";
 import animation from "../../../public/lotties/404.json";
 import { getUserIdFromToken } from "@/lib/jwt";
 import { redirect } from "next/navigation";
 import CompleteButton from "@/components/CompleteButton";
-import { toast } from "sonner";
 
 export default async function LessonPage({
   params,
@@ -44,7 +43,7 @@ export default async function LessonPage({
       />
     );
 
-  const previousLesson = lesson.course.lessons.slice(0, lesson.order);
+  const previousLesson = lesson.course.lessons.slice(0, lesson.order + 1);
   const progress = await prisma.lessonProgres.findMany({
     where: {
       userId,
@@ -71,7 +70,10 @@ export default async function LessonPage({
       {/* HERO */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-12 px-6 rounded-t-lg rounded-b-2xl shadow-md">
         <div className="max-w-5xl mx-auto">
-          <h1 className="text-4xl font-bold mb-2">{lesson.title}</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-4xl font-bold mb-2">{lesson.title}</h1>
+            {completedIds.includes(lesson.id) && <CheckCircle size={20} />}
+          </div>
           <p className="text-lg opacity-90 max-w-2xl">{lesson.description}</p>
 
           <div className="mt-4 flex gap-3 flex-wrap">
