@@ -105,9 +105,13 @@ export default async function CoursePage({
       {/* CTA */}
       <div className="w-full mx-auto px-6 mt-20">
         <div className="bg-card/50 rounded-2xl shadow p-8 text-center">
-          <h3 className="text-xl font-bold mb-2">Completa il corso 🎓</h3>
+          <h3 className="text-xl font-bold mb-2">
+            {!completed ? "Completa il corso 🎓" : "Hai Completato il corso 👏"}
+          </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Segui tutte le lezioni per ottenere il certificato finale.
+            {!completed
+              ? "Segui tutte le lezioni per ottenere il certificato finale."
+              : "Clicca qui sotto per il tuo certificato"}
           </p>
           {!course.enrollments[0] ? (
             <EnrollButton courseId={course.id} />

@@ -3,13 +3,11 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { title, description, subscription, certificateFile } =
-      await req.json();
+    const { title, description, subscription } = await req.json();
 
     if (
       !title ||
       !description ||
-      !certificateFile ||
       !(title.trim().length > 0) ||
       !(description.trim().length > 0)
     )
@@ -26,7 +24,6 @@ export async function POST(req: Request) {
         title,
         description,
         subscription,
-        certificate: certificateFile,
       },
     });
     if (!newCourse)

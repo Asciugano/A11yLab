@@ -1,6 +1,13 @@
 "use client";
 
-import { User, BookOpen, LogIn, LogOut, GraduationCap } from "lucide-react";
+import {
+  User,
+  BookOpen,
+  LogIn,
+  LogOut,
+  GraduationCap,
+  Award,
+} from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthProvider";
 import axios, { AxiosError } from "axios";
@@ -72,6 +79,14 @@ export default function NavBar() {
           >
             <GraduationCap size={18} />
             <span>My Courses</span>
+          </Link>
+
+          <Link
+            href="/certificates"
+            className="flex items-center gap-1 hover:text-hover-primary transition"
+          >
+            <Award size={18} />
+            <span>Certificati</span>
           </Link>
 
           {/* Login o Logout */}

@@ -3,7 +3,7 @@
 import CourseCard from "@/components/CourseCard";
 import { useAuth } from "@/context/AuthProvider";
 import NotFound from "../not-found";
-import animation from "../../public/lotties/404.json";
+import animation from "../../public/lotties/empty.json";
 
 export default function MyCoursePage() {
   const { user } = useAuth();

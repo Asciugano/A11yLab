@@ -16,8 +16,8 @@ function generateColorFromCourseName(str: string) {
   const hue2 = (hash + 60) % 360;
 
   return {
-    from: `hsl(${hue1}, 70%, 50%`,
-    to: `hsl(${hue2}, 70%, 40%`,
+    from: `hsl(${hue1}, 70%, 50%)`,
+    to: `hsl(${hue2}, 70%, 40%)`,
   };
 }
 
