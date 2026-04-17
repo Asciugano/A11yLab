@@ -38,6 +38,7 @@ export default function CreateCertButton({ course }: { course: Course }) {
           name: user.fullName,
           email: user.email,
           course: course.title,
+          courseId: course.id,
           date: new Date().toLocaleString("IT-it"),
         },
         { responseType: "blob" },

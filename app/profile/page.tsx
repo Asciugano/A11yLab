@@ -24,6 +24,7 @@ export default function Profile() {
     setError(null);
 
     try {
+      // TODO: implementare
     } catch (e) {
       console.error(e);
 

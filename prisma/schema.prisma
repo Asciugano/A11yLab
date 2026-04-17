@@ -61,23 +61,10 @@ model Course {
 
   enrollments Enrollments[]
 
-  certificate  CertificateTemplate?
   certificates Certificate[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-}
-
-model CertificateTemplate {
-  id String @id @default(uuid())
-
-  course   Course @relation(fields: [courseId], references: [id])
-  courseId String @unique
-
-  resUrl String?
-
-  createdAt    DateTime      @default(now())
-  certificates Certificate[]
 }
 
 model Certificate {
@@ -89,12 +76,9 @@ model Certificate {
   course   Course @relation(fields: [courseId], references: [id])
   courseId String
 
-  template              CertificateTemplate? @relation(fields: [certificateTemplateId], references: [id])
-  certificateTemplateId String?
-
-  resUrl String?
-
   createdAt DateTime @default(now())
+
+  @@unique([userId, courseId])
 }
 
 model Enrollments {
