@@ -4,15 +4,39 @@ import { useAuth } from "@/context/AuthProvider";
 import NotFound from "../not-found";
 import animation from "../../public/lotties/404.json";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
-import { AxiosError } from "axios";
+import {
+  CreditCard,
+  Eye,
+  EyeOff,
+  Loader2,
+  Lock,
+  Mail,
+  User,
+} from "lucide-react";
+import axios, { AxiosError } from "axios";
 import Link from "next/link";
+import { Subscription } from "@/lib/generated/prisma/enums";
+import { toast } from "sonner";
+import EnumDropdown from "@/components/Dropdown";
 
 export default function Profile() {
   const { user, loading } = useAuth();
+  if (!user)
+    return (
+      <NotFound
+        lottieAnimation={animation}
+        message="Impossibile trovare l'utente"
+      />
+    );
 
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    fullName: user.fullName || "",
+    email: user.email || "",
+    password: "",
+    subscription: user.subscription.toString() || Subscription.FREE.toString(),
+  });
   const [showForm, setShowForm] = useState(false);
+  const [showPass, setShowPass] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
   const [loadingF, setLoadingF] = useState(false);
@@ -24,16 +48,23 @@ export default function Profile() {
     setError(null);
 
     try {
-      // TODO: implementare
+      await axios.patch("/api/auth/edit", formData);
+
+      toast.success("Modificato con successo il profilo");
+      setShowForm(false);
     } catch (e) {
       console.error(e);
 
       const err = e as AxiosError<{ message?: string }>;
+      let message = "Ops... Qualcosa e' andato storto";
 
-      if (err.response?.data.message) setError(err.response.data.message);
+      if (err.response?.data.message) message = err.response.data.message;
       else if (typeof err.response?.data === "string")
-        setError(err.response.data);
-      else setError("Ops... Qualcosa e' andato storto");
+        message = err.response.data;
+
+      setError(message);
+
+      toast.error(message);
     } finally {
       setLoadingF(false);
     }
@@ -44,14 +75,6 @@ export default function Profile() {
       <div className="flex items-center justify-center">
         <Loader2 size={20} />
       </div>
-    );
-
-  if (!user)
-    return (
-      <NotFound
-        lottieAnimation={animation}
-        message="Impossibile trovare l'utente"
-      />
     );
 
   return (
@@ -168,6 +191,125 @@ export default function Profile() {
           </Link>
         </div>
       </div>
+
+      {/* Modifica */}
+      <div className="w-full mx-auto px-6 mt-20">
+        <div className="bg-card/50 rounded-2xl shadow p-8 text-center">
+          <h3 className="text-xl font-bold mb-2">Modifica ✍️</h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            Compila i campi che vuoi cambiare
+          </p>
+          <button
+            onClick={() => {
+              setShowForm(!showForm);
+              if (!showForm)
+                setFormData({
+                  fullName: user.fullName || "",
+                  email: user.email || "",
+                  password: "",
+                  subscription:
+                    user.subscription.toString() ||
+                    Subscription.FREE.toString(),
+                });
+            }}
+            className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition"
+          >
+            {!showForm ? "Modifica" : "Annulla"}
+          </button>
+        </div>
+      </div>
+
+      {showForm && (
+        <div className="w-full mx-auto px-6 mt-20">
+          <div className="bg-card/50 rounded-2xl shadow p-8 text-center">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* name */}
+              <div className="flex items-center gap-3 border-neutral-400 dark:border-neutral-600 rounded-lg px-3 py-2 bg-white dark:bg-neutral-900 focus-within:ring-primary">
+                <User
+                  size={20}
+                  className="text-neutral-500 dark:text-neutral-400"
+                />
+                <input
+                  type="text"
+                  placeholder="Nome"
+                  value={formData.fullName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fullName: e.target.value })
+                  }
+                  className="w-full bg-transparent outline-none text-neutral-800 dark:text-neutral-100 placeholder-neutral-500"
+                />
+              </div>
+
+              {/* email */}
+              <div className="flex items-center gap-3 border-neutral-400 dark:border-neutral-600 rounded-lg px-3 py-2 bg-white dark:bg-neutral-900 focus-within:ring-primary">
+                <Mail
+                  size={20}
+                  className="text-neutral-500 dark:text-neutral-400"
+                />
+                <input
+                  type="text"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  className="w-full bg-transparent outline-none text-neutral-800 dark:text-neutral-100 placeholder-neutral-500"
+                />
+              </div>
+
+              <div className="flex items-center gap-3 border-neutral-400 dark:border-neutral-600 rounded-lg px-3 py-2 bg-white dark:bg-neutral-900 focus-within:ring-primary">
+                <Lock
+                  size={20}
+                  className="text-neutral-500 dark:text-neutral-400"
+                />
+                <input
+                  type={showPass ? "text" : "password"}
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  className="w-full bg-transparent outline-none text-neutral-800 dark:text-neutral-100 placeholder-neutral-500"
+                />
+                <button onClick={() => setShowPass(!showPass)} type="button">
+                  {showPass ? <Eye size={18} /> : <EyeOff size={18} />}
+                </button>
+              </div>
+
+              {/* role */}
+              <EnumDropdown
+                value={formData.subscription}
+                onChange={(role) =>
+                  setFormData({ ...formData, subscription: role })
+                }
+                options={Object.values(Subscription)}
+                icon={
+                  <CreditCard
+                    size={20}
+                    className="text-neutral-500 dark:text-neutral-400"
+                  />
+                }
+              />
+
+              {error && error.length > 0 && (
+                <p className="text-sm text-red-500 text-center">{error}</p>
+              )}
+
+              <button
+                type="submit"
+                disabled={loadingF}
+                className="mt-8 w-full flex items-center justify-center bg-primary hover:bg-hover-primary text-white font-semibold rounded-lg px-4 py-2 transition disabled:cursor-not-allowed"
+              >
+                {loadingF ? (
+                  <Loader2 size={20} className="animate-spin" />
+                ) : (
+                  "Modifica"
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
