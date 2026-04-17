@@ -4,7 +4,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen">
       {/* HERO */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-24 px-6 text-center">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-24 px-6 text-center rounded-2xl m-1">
         <h1 className="text-5xl font-bold mb-4">A11yLab ♿</h1>
         <p className="text-xl opacity-90 max-w-2xl mx-auto mb-6">
           Impara a creare siti accessibili, inclusivi e conformi alle normative.

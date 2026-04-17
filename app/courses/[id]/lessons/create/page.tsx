@@ -137,7 +137,7 @@ export default function CreateLessonPage() {
             />
             <input
               type="file"
-              accept={`${formData.type === LessonType.DOCUMENT ? "application/pdf" : "video/*"}`}
+              accept={`${formData.type === LessonType.DOCUMENT ? "application/pdf" : "video/mp4"}`}
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 if (file) setFile(file);
