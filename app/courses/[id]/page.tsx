@@ -7,6 +7,7 @@ import EnrollButton from "@/components/EnrollButton";
 import { getUserIdFromToken } from "@/lib/jwt";
 import Link from "next/link";
 import CreateCertButton from "@/components/CreateCertButton";
+import { CheckCircle } from "lucide-react";
 
 export default async function CoursePage({
   params,
@@ -55,8 +56,9 @@ export default async function CoursePage({
         <div>
           <div className="max-w-5xl mx-auto flex justify-between items-start">
             <div>
-              <h1 className="text-4xl font-bold tracking-wide mb-2">
+              <h1 className="text-4xl font-bold tracking-wide mb-2 flex gap-2 items-center">
                 {course.title}
+                {completed && <CheckCircle size={20} />}
               </h1>
               <p className="text-lg opacity-90 max-w-2xl">
                 {course.description}

@@ -8,7 +8,11 @@ export default function Home() {
   const { user, loading } = useAuth();
 
   if (loading)
-    return <Loader2 size={20} className="text-primary animate-spin" />;
+    return (
+      <div className="flex items-center justify-center">
+        <Loader2 size={20} className="text-primary animate-spin" />
+      </div>
+    );
 
   if (!user) return <Landing />;
 
